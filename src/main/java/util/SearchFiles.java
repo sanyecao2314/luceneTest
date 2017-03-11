@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
@@ -20,7 +21,11 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 
+import gui.MainFrame;
+
 public class SearchFiles {
+	private static final Logger logger = Logger.getLogger(SearchFiles.class.getName());
+	
 	String indexPath;
 	int repeat = 0;
 	boolean raw = false;
@@ -48,7 +53,7 @@ public class SearchFiles {
 		}
 
 		Query query = parser.parse(queryString);
-		System.out.println("...Searching for: " + query.toString(field));
+		logger.info("...Searching for: " + query.toString(field));
 
 		if (repeat > 0) {                      // repeat & time as benchmark
 			Date start = new Date();
@@ -56,7 +61,7 @@ public class SearchFiles {
 				searcher.search(query,100);
 			}
 			Date end = new Date();
-			System.out.println("Time: "+(end.getTime()-start.getTime())+"ms");
+			logger.info("Time: "+(end.getTime()-start.getTime())+"ms");
 		}
 
 		ScoreDoc[] hits = doPagingSearch(in, searcher, query, hitsPerPage, raw, queryString == null);
@@ -69,8 +74,8 @@ public class SearchFiles {
 			Document d = searcher.doc(docId);
 			String p = d.get("path");
 			// judge if the doc is to choose
-			boolean fin = false;
-			System.out.println(p.charAt(13) +" "+ time0.charAt(3) +" "+ time1.charAt(3));
+			boolean fin = true;
+			logger.info(p.charAt(13) +" "+ time0.charAt(3) +" "+ time1.charAt(3));
 			if(p.charAt(13)>=time0.charAt(3) && p.charAt(13)<=time1.charAt(3))
 			{
 				int tm0 = (time0.charAt(5) - '0')*10 + (time0.charAt(6) - '0');
@@ -88,12 +93,12 @@ public class SearchFiles {
 						if(day >= td0 && day <= td1) fin = true;
 				}
 			}
-			System.out.println("fin: "+fin); // for debug use
+			logger.info("fin: "+fin); // for debug use
 			if(fin){
 				result[index+1][0] = ""+(index+2);
 				result[index+1][1] = d.get("title");
 				result[index+1][2] = p.substring(10,20);
-				System.out.println(d.get("path")); // for debug use
+				logger.info(d.get("path")); // for debug use
 				index += 1;
 			}
 		}
@@ -108,7 +113,7 @@ public class SearchFiles {
 		TopDocs results = searcher.search(query, 5 * hitsPerPage);
 		ScoreDoc[] hits = results.scoreDocs;
 		int numTotalHits = results.totalHits;
-		System.out.println(numTotalHits + " total matching documents");
+		logger.info(numTotalHits + " total matching documents");
 		return hits;
 	}
 }

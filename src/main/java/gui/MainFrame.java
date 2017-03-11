@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,6 +26,8 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 public class MainFrame extends JFrame {
+	private static final Logger logger = Logger.getLogger(MainFrame.class.getName());
+	
 	LuceneSearch ls;
 	JTable tbl_result;
 	DefaultTableModel dtm;
@@ -50,7 +53,7 @@ public class MainFrame extends JFrame {
 		//*********** time span *************//
 		JLabel label0 = new JLabel("     Time between");
 		JComboBox cbb0=new JComboBox(); 
-		cbb0.addItem("2016");  cbb0.addItem("2015");  cbb0.addItem("2014");
+		cbb0.addItem("2017"); cbb0.addItem("2016");  cbb0.addItem("2015");  cbb0.addItem("2014");
 		JLabel label1 = new JLabel("年");
 		JComboBox cbb1=new JComboBox();
 		cbb1.addItem("01");  cbb1.addItem("02");  cbb1.addItem("03");  cbb1.addItem("04");
@@ -69,7 +72,7 @@ public class MainFrame extends JFrame {
 		JLabel label3 = new JLabel("日");
 		JLabel label4 = new JLabel("  (小)to(大)  ");
 		JComboBox cbb3=new JComboBox(); 
-		cbb3.addItem("2016");  cbb3.addItem("2015");  cbb3.addItem("2014");
+		cbb3.addItem("2017"); cbb3.addItem("2016");  cbb3.addItem("2015");  cbb3.addItem("2014");
 		JLabel label5 = new JLabel("年");
 		JComboBox cbb4=new JComboBox();
 		cbb4.addItem("01");  cbb4.addItem("02");  cbb4.addItem("03");  cbb4.addItem("04");
@@ -90,14 +93,14 @@ public class MainFrame extends JFrame {
 				JButton btn_serch = new JButton("Search");
 				btn_serch.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println("...Query for: "+txtf_serch.getText());
+						logger.info("...Query for: "+txtf_serch.getText());
 						String time0 = (String)cbb0.getSelectedItem() + "\\" 
 										+ (String)cbb1.getSelectedItem() + "\\"
 										+ (String)cbb2.getSelectedItem();
 						String time1 = (String)cbb3.getSelectedItem() + "\\" 
 								+ (String)cbb4.getSelectedItem() + "\\"
 								+ (String)cbb5.getSelectedItem();
-						System.out.println(time0+" "+time1);
+						logger.info(time0+" "+time1);
 						doQuery(txtf_serch.getText(), time0, time1);		
 					}
 				});
@@ -110,7 +113,7 @@ public class MainFrame extends JFrame {
 			public void mouseClicked(java.awt.event.MouseEvent e) {		
 				int row = tbl_result.rowAtPoint(e.getPoint());
 			    int col = tbl_result.columnAtPoint(e.getPoint());
-			    System.out.println(row+" "+col);// for debug use
+			    logger.info(row+" "+col);// for debug use
 			    String filename = tbl_result.getValueAt(row, col).toString();
 			    String filedate = tbl_result.getValueAt(row, col+1).toString();
 			    try {

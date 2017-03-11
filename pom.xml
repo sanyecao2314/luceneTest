@@ -41,6 +41,16 @@
 			<artifactId>lucene-analyzers-smartcn</artifactId>
 			<version>${lucene.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.lucene</groupId>
+		    <artifactId>lucene-suggest</artifactId>
+		    <version>${lucene.version}</version>
+		</dependency>
+		<!-- <dependency>
+	        <groupId>org.wltea.ik-analyzer</groupId>
+	        <artifactId>ik-analyzer</artifactId>
+	        <version>3.2.8</version>
+		</dependency> -->
 	</dependencies>
 
 

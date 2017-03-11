@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
@@ -27,21 +28,24 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import gui.MainFrame;
+
 
 public class IndexFiles {
+	private static final Logger logger = Logger.getLogger(IndexFiles.class.getName());
 
 	public IndexFiles(String indexDestiny, String documentsPath){
 		boolean create = true;
 		//******** find the document_path *********//
 		final Path docDir = Paths.get(documentsPath);
 		if (!Files.isReadable(docDir)) {
-			System.out.println("Document directory '" +docDir.toAbsolutePath()+ "' does not exist or is not readable, please check the path");
+			logger.info("Document directory '" +docDir.toAbsolutePath()+ "' does not exist or is not readable, please check the path");
 			System.exit(1);
 		}
 
 		Date start = new Date();
 		try {
-			System.out.println("Indexing to directory '" + indexDestiny + "'...");
+			logger.info("Indexing to directory '" + indexDestiny + "'...");
 
 			Directory dir = FSDirectory.open(Paths.get(indexDestiny));      
 			//Analyzer analyzer = new StandardAnalyzer();
@@ -59,10 +63,10 @@ public class IndexFiles {
 			writer.close();
 			Date end = new Date();
 			//*********** calculate the time **********//
-			System.out.println(end.getTime() - start.getTime() + " total milliseconds");
+			logger.info(end.getTime() - start.getTime() + " total milliseconds");
 
 		} catch (IOException e) {
-			System.out.println(" caught a " + e.getClass() +
+			logger.info(" caught a " + e.getClass() +
 					"\n with message: " + e.getMessage());
 		}
 	}

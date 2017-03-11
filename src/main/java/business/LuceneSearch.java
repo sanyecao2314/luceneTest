@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -12,6 +13,8 @@ import util.IndexFiles;
 import util.SearchFiles;
 
 public class LuceneSearch {
+	private static final Logger logger = Logger.getLogger(LuceneSearch.class.getName());
+	
 	SearchFiles sf;
 	public LuceneSearch()
 	{
